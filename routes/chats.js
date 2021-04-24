@@ -15,6 +15,8 @@ io.on("connect", (socket) => {
 
 // Chats
 router.get("/allchats", (req, res) => {
+  // console.log(req.query.ownId)
+  // console.log(req.query.usertoken)
   let ownId = Number(req.query.ownId);
   verifyToken(ownId, req.query.usertoken);
 
@@ -29,7 +31,7 @@ router.get("/allchats", (req, res) => {
     ORDER BY user_chatroom.chatroomid, messages.id DESC
     `, (err, result) => {
     if (err) {
-      console.log(error);
+      console.log(err);
       res.end()
     } else {
       result.rows.sort((a, b) => b.id - a.id)

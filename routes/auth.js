@@ -1,13 +1,23 @@
+const cons = require("consolidate");
 const {
   router,
   jwt,
   client
 } = require("../index");
 
-// sign up
-router.post("/signup", (req, res) => {
+const verifyToken = require("../services/verification");
 
+// sign up
+// router.post("/signup", (req, res) => { 
+//   res.json({
+//     message:"testing"
+//   })
+// });
+router.post("/signup", (req, res) => {
+  console.log(req.body.email)
+  console.log(req.body.pw)
   let values = [req.body.email, req.body.pw];
+  console.log(values)
 
   client.query(
     'SELECT * FROM users WHERE useremail = $1',
@@ -58,6 +68,7 @@ router.post("/authenticate", (req, res) => {
 
 // Login
 router.post("/login", (req, res) => {
+  console.log(req.body.email)
   let query = {
     text: 'SELECT * FROM users WHERE useremail=$1',
     values: [req.body.email]
@@ -108,5 +119,18 @@ router.post("/login", (req, res) => {
     }
   })
 })
-
+// router.get("/:id", (req, res) =>{
+//   console.log(req.params.id)
+//   let uid = Number(req.params.id)
+//   client.query('SELECT * FROM users WHERE id = $1', [uid], (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       res.send(err);
+//     } else { 
+//       res.json({
+//         user:result.rows
+//       })
+//     }
+//   })
+// })
 module.exports = router;

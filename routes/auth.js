@@ -1,4 +1,7 @@
 const cons = require("consolidate");
+const multer = require('multer');
+const upload = multer({dest:'./Images'});
+
 const {
   router,
   jwt,
@@ -6,6 +9,10 @@ const {
 } = require("../index");
 
 const verifyToken = require("../services/verification");
+
+const storage = multer.diskStorage({
+  destination:'./Images'
+})
 
 // sign up
 // router.post("/signup", (req, res) => { 
@@ -54,6 +61,8 @@ router.post("/signup", (req, res) => {
     });
 });
 
+// router.post('/upload',upload.single('image'))
+
 // Checking for the localStorage
 router.post("/authenticate", (req, res) => {
   jwt.verify(req.body.userToken, 'shhh', function (err, decoded) {
@@ -68,7 +77,7 @@ router.post("/authenticate", (req, res) => {
 
 // Login
 router.post("/login", (req, res) => {
-  console.log(req.body.email)
+  // console.log(req.body.email)
   let query = {
     text: 'SELECT * FROM users WHERE useremail=$1',
     values: [req.body.email]
@@ -119,18 +128,34 @@ router.post("/login", (req, res) => {
     }
   })
 })
-// router.get("/:id", (req, res) =>{
-//   console.log(req.params.id)
-//   let uid = Number(req.params.id)
-//   client.query('SELECT * FROM users WHERE id = $1', [uid], (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       res.send(err);
-//     } else { 
-//       res.json({
-//         user:result.rows
-//       })
-//     }
-//   })
+router.get("/username/:id", (req, res) =>{
+  // console.log(req.params.id)
+  let uid = Number(req.params.id)
+  client.query('SELECT * FROM users WHERE id = $1', [uid], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } else { 
+      res.json({
+        user:result.rows
+      })
+    }
+  })
+})
+
+// router.post('/upload',upload.single('image'), (req, res) =>{
+//   console.log(req.file)
+//   // let uid = Number(req.params.id)
+//   // client.query('SELECT * FROM users WHERE id = $1', [uid], (err, result) => {
+//   //   if (err) {
+//   //     console.log(err,1);
+//   //     res.send(err);
+//   //   } else { 
+//   //     res.json({
+//   //       user:result.rows
+//   //     })
+//   //   }
+//   // })
 // })
+
 module.exports = router;

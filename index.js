@@ -27,6 +27,8 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 app.use(cors());
+app.use(express.static('Images'));
+app.use('/Images', express.static(__dirname + '/Images'));
 
 const port = process.env.PORT || 5000;
 

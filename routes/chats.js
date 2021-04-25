@@ -1,3 +1,4 @@
+const cons = require("consolidate");
 const {
   io,
   router,
@@ -35,6 +36,7 @@ router.get("/allchats", (req, res) => {
       res.end()
     } else {
       result.rows.sort((a, b) => b.id - a.id)
+      console.log(result.rows)
       res.send(result.rows);
     }
   }
